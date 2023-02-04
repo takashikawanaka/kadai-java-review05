@@ -10,27 +10,25 @@ import java.sql.SQLException;
 public class Review05 {
 
     public static void main(String[] args) {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-
-            con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost/kadaidb?useSSL=false&allowPublicKeyRetrieval=true", "root", "Kwnk123_");
-
             String selectSql = "SELECT * FROM person WHERE id = ?";
-            pstmt = con.prepareStatement(selectSql);
 
-            System.out.print("検索キーワードを入力してください > ");
-            int num = keyInNum();
-            pstmt.setInt(1, num);
-            rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                String name = rs.getString("name");
-                int age = rs.getInt("age");
-                System.out.println(name + "\n" + age);
+            try ( // try-with-resources
+                    Connection con = DriverManager.getConnection(
+                            "jdbc:mysql://localhost/kadaidb?useSSL=false&allowPublicKeyRetrieval=true", "root",
+                            "Kwnk123_");
+                    PreparedStatement pstmt = con.prepareStatement(selectSql)) {
+                System.out.print("検索キーワードを入力してください > ");
+                int num = keyInNum();
+                pstmt.setInt(1, num);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    while (rs.next()) {
+                        String name = rs.getString("name");
+                        int age = rs.getInt("age");
+                        System.out.println(name + "\n" + age);
+                    }
+                }
             }
         } catch (ClassNotFoundException e) {
             System.out.println("Class ERROR");
