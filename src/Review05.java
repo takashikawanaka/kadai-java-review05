@@ -17,7 +17,7 @@ public class Review05 {
             try ( // try-with-resources
                     Connection con = DriverManager.getConnection(
                             "jdbc:mysql://localhost/kadaidb?useSSL=false&allowPublicKeyRetrieval=true", "root",
-                            "Kwnk123_");
+                            "_____");
                     PreparedStatement pstmt = con.prepareStatement(selectSql)) {
                 System.out.print("検索キーワードを入力してください > ");
                 int num = keyInNum();
